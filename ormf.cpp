@@ -44,7 +44,7 @@ const int K = 100;
 const int lambda = 20;
 const double alpha = 0.001;
 const int iteration = 20;
-const int maxiter = 3;
+const int maxiter = 20;
 const int n_dim = 100;
 
 
