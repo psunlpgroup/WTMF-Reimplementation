@@ -135,7 +135,7 @@ SPARSE_MAT read_matrix(const char *filename, COORD &n_words, COORD &n_docs) {
 // return matrix P, matrix Q 
 MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
     MatrixPair pair;
-    pair.p = sprandu(n_dim, n_words, 1);
+    pair.p = sprandn(n_dim, n_words, 1);
     pair.q = SPARSE_MAT(n_dim, n_docs);
 	return pair;
 }
