@@ -20,6 +20,12 @@ Submit the job under interactive node:
 ```
 qsub -I <resource requirement>
 ```
+
+E.g.:
+```
+qsub -A open -l walltime=1:00:00 -l nodes=1:ppn=2 -I
+```
+
 Load gcc module for cpp compiler: 
 ```
 module load gcc
