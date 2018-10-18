@@ -9,6 +9,9 @@ Input will be "train.ind" file from preprocessing; output should be a .txt file 
 ## Requirement 
 Armadillo, OpenMP, HPC environment with blas, lapack, fortran (e.g.,Penn State ACI-ICS)
 
+## Rationale 
+Please refer to train_ormf.m and ormf.m for the algorithm. 
+
 ## Steps (Running on ACI-ICS)
 Go to Yanjun's directory: 
 ```
@@ -38,3 +41,4 @@ Run the program:
 ```
 ./ormf1
 ```
+
