@@ -42,7 +42,7 @@ const char* data_file = "output.txt";
 const double w_m = 0.01;
 const int K = 100;
 const int lambda = 20;
-const double alpha = 0.001;
+const double alpha = 0.0001;
 const int iteration = 20;
 const int maxiter = 20;
 const int n_dim = 100;
@@ -293,7 +293,7 @@ int main( int argc, char **argv )
 	P = compute_QP(P,EYE,Q,i4d, i4w, n_docs, n_words); 
 	write_mat_data(data_file, P); 
 	double end_time = read_timer( ); 
-	printf("Running for : %f time\n", simulation_time - end_time);
+	printf("Running for : %f time\n", end_time - simulation_time);
 	return 0;
 }
 
