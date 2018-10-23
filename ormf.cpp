@@ -168,11 +168,13 @@ IndexPair build_index(SPARSE_MAT X, COORD n_words, COORD n_docs) {
 double mean_func(DENSE_MAT complex_p){
 	double average = 0;
 	for (int i=0;i<n_dim; i++){
-		for(int j =0; j<n_dim;j++){
-			average += complex_p(i,j); 
-		}
+            average += complex_p(i, i);
+		/* for(int j =0; j<n_dim;j++){ */
+		/* 	average += complex_p(i,j); */ 
+		/* } */
 	}
-	average = average / (n_dim*n_dim); 
+	/* average = average / (n_dim*n_dim); */ 
+	average = average / n_dim; 
 	return average; 
 }
 // Return matrix P
