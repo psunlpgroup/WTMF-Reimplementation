@@ -111,8 +111,6 @@ SPARSE_MAT read_matrix(const char *filename, COORD &n_words, COORD &n_docs) {
     n_words = rows; 
     n_docs = cols;
 
-    int i = 0;
-    int j = 0;
     cout << "Building matrix... ";
     cout.flush();
     fin.open(filename);
@@ -187,11 +185,10 @@ DENSE_MAT compute_QP(DENSE_MAT P, DENSE_MAT EYE, DENSE_MAT Q, vector<Index> i4d,
 
         // Step 1 
         // Compute matrix Q
-        int j=0, i=0; 
         // #pragma omp parallel for 
-        for(j=0; j<n_docs; j++){
+        for(COORD j=0; j<n_docs; j++){
             DENSE_MAT pv(n_dim,i4d[j].i.size()); 
-            for (COORD ii = 0; ii < i4d[j].i.size(); ++ii) { 
+            for (long unsigned int ii = 0; ii < i4d[j].i.size(); ++ii) { 
                 pv.col(ii) = P.col(i4d[j].i[ii]);
             }
             // solve a system of linear equations 
@@ -206,7 +203,7 @@ DENSE_MAT compute_QP(DENSE_MAT P, DENSE_MAT EYE, DENSE_MAT Q, vector<Index> i4d,
         // #pragma omp parallel for  
         for(COORD ind=0; ind<n_words; ind++){
             DENSE_MAT qv(n_dim,i4w[ind].i.size()); 
-            for (COORD ii = 0; ii < i4w[ind].i.size(); ++ii) {
+            for (long unsigned int ii = 0; ii < i4w[ind].i.size(); ++ii) {
                 qv.col(ii) = Q.col(i4w[ind].i[ii]) ;
             }
             // solve a system of linear equations 
@@ -242,8 +239,8 @@ void write_mat_data(const char* data_file, DENSE_MAT data_mat){
     // Amardillo way to get rows and columns 
     cout << "[wtmf-corpus.cpp write_mat_data()]: cols=" << data_mat.n_cols << " rows=" << data_mat.n_rows << endl;
     out_file << data_mat.n_cols << " " << data_mat.n_rows << endl;
-    for (int i = 0; i < data_mat.n_cols; i++) {
-        for (int j = 0; j < data_mat.n_rows; j++) {
+    for (uword i = 0; i < data_mat.n_cols; i++) {
+        for (uword j = 0; j < data_mat.n_rows; j++) {
             out_file << data_mat(j,i) << " ";
         }
         out_file << endl;
