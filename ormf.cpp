@@ -177,6 +177,8 @@ DENSE_MAT compute_QP(MatrixPair matpair, IndexPair i4pair, int n_docs, int n_wor
     vector<Index> i4w = i4pair.i4w;  
 
     // omp_set_num_threads(omp_get_num_procs());
+    // cout << "Number of processors in use: " << omp_get_num_procs() << endl; 
+
     // #pragma omp parallel 
     for(int iter =0; iter < maxiter; iter++){
         cout << "WTMF training session : iteration = "<< iter << endl;
