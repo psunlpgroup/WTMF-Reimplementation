@@ -166,7 +166,16 @@ IndexPair build_index(SPARSE_MAT X, COORD n_words, COORD n_docs) {
 }
 
 // Return matrix P
-DENSE_MAT compute_QP(DENSE_MAT P, DENSE_MAT EYE, DENSE_MAT Q, vector<Index> i4d, vector<Index> i4w, int n_docs, int n_words){
+DENSE_MAT compute_QP(MatrixPair matpair, IndexPair i4pair, int n_docs, int n_words){
+
+    DENSE_MAT P = matpair.p; 
+    DENSE_MAT Q = matpair.q; 
+
+    DENSE_MAT EYE = eye(n_dim, n_dim);
+
+    vector<Index> i4d = i4pair.i4d;
+    vector<Index> i4w = i4pair.i4w;  
+
     // omp_set_num_threads(omp_get_num_procs());
     // #pragma omp parallel 
     for(int iter =0; iter < maxiter; iter++){
@@ -255,16 +264,10 @@ int main( int argc, char **argv )
     SPARSE_MAT X = read_matrix(filename, n_words, n_docs); 
 
     MatrixPair matpair = Initialize_PQ(n_words, n_docs);  
-    DENSE_MAT P = matpair.p; 
-    DENSE_MAT Q = matpair.q; 
-
-    DENSE_MAT EYE = eye(n_dim, n_dim);
 
     IndexPair i4pair = build_index(X, n_words, n_docs);
-    vector<Index> i4d = i4pair.i4d;
-    vector<Index> i4w = i4pair.i4w;  
 
-    P = compute_QP(P, EYE, Q, i4d, i4w, n_docs, n_words); 
+    DENSE_MAT P = compute_QP(matpair, i4pair, n_docs, n_words); 
 
     write_mat_data(data_file, P); 
 
