@@ -165,16 +165,6 @@ IndexPair build_index(SPARSE_MAT X, COORD n_words, COORD n_docs) {
     return pair;
 }
 
-// Find the mean of the diagonal of `complex_p`
-double mean_func(DENSE_MAT complex_p){
-    double average = 0;
-    for (int i=0; i<n_dim; i++){
-        average += complex_p(i, i);
-    }
-    average = average / n_dim; 
-    return average; 
-}
-
 // Return matrix P
 DENSE_MAT compute_QP(DENSE_MAT P, DENSE_MAT EYE, DENSE_MAT Q, vector<Index> i4d, vector<Index> i4w, int n_docs, int n_words){
     // omp_set_num_threads(omp_get_num_procs());
@@ -219,10 +209,11 @@ DENSE_MAT compute_QP(DENSE_MAT P, DENSE_MAT EYE, DENSE_MAT Q, vector<Index> i4d,
         // Orthognal projection 
         // #pragma omp critical 
         if(alpha!=0){
-            DENSE_MAT temp_eye = eye<mat>(n_dim,n_dim); 
             cout << "WTMF gradient descent " << endl;
-            double c = mean_func(P*P.t()); 
-            P = P - alpha * (P * P.t() - c*temp_eye)*P; 
+            // arma::trace(X) -- sum of the elements on the main diagonal of X
+            // find the mean of the diagonal of P*P.t()
+            double c = trace(P*P.t()) / n_dim;
+            P = P - (alpha * ((P*P.t() - c*EYE) * P));
         }
     }
 
