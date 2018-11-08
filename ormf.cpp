@@ -50,8 +50,8 @@ const int n_dim = 100;
 
 struct MatrixPair {
     // Represents two matrices
-    SPARSE_MAT p;
-    SPARSE_MAT q;
+    DENSE_MAT p;
+    DENSE_MAT q;
 };
 
 struct Index {
@@ -114,9 +114,7 @@ SPARSE_MAT read_matrix(const char *filename, COORD &n_words, COORD &n_docs) {
     cout << "Building matrix... ";
     cout.flush();
     fin.open(filename);
-    while (fin >> word) {
-        fin >> doc;
-        fin >> score;
+    while (fin >> word >> doc >> score) {
         word = word - 1;
         doc = doc - 1;
         mat(word, doc) = score;
@@ -131,8 +129,15 @@ SPARSE_MAT read_matrix(const char *filename, COORD &n_words, COORD &n_docs) {
 // return matrix P, matrix Q 
 MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
     MatrixPair pair;
-    pair.p = sprandn(n_dim, n_words, 1);
-    pair.q = SPARSE_MAT(n_dim, n_docs);
+
+    arma_rng::set_seed_random();
+
+    pair.p = DENSE_MAT(n_dim, n_words);
+    pair.p.randn();
+
+    pair.q = DENSE_MAT(n_dim, n_docs);
+    pair.q.zeros();
+
     return pair;
 }
 
@@ -259,8 +264,8 @@ int main( int argc, char **argv )
     SPARSE_MAT X = read_matrix(filename, n_words, n_docs); 
 
     MatrixPair matpair = Initialize_PQ(n_words, n_docs);  
-    DENSE_MAT P(matpair.p); 
-    DENSE_MAT Q(matpair.q); 
+    DENSE_MAT P = matpair.p; 
+    DENSE_MAT Q = matpair.q; 
 
     DENSE_MAT EYE = eye(n_dim, n_dim);
 
