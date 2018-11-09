@@ -9,4 +9,4 @@
 ## was submitted.
 cd $PBS_O_WORKDIR
 ## Now we want to run the program "test". "test" is in the directory that this script is being submitted from
-./ormf1 > logfile
+./ormf
