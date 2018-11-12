@@ -127,13 +127,29 @@ SPARSE_MAT read_matrix(const char *filename, COORD &n_words, COORD &n_docs) {
 
 // Initialize matrix P and Q, where P is dim * n_words, Q is dim * n_docs 
 // return matrix P, matrix Q 
+// TODO: currently inits to the default Matlab random numbers
 MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
     MatrixPair pair;
 
-    arma_rng::set_seed_random();
+    /* arma_rng::set_seed_random(); */
 
-    pair.p = DENSE_MAT(n_dim, n_words);
-    pair.p.randn();
+    /* pair.p = DENSE_MAT(n_dim, n_words); */
+    /* pair.p.randn(); */
+
+    DENSE_MAT P = DENSE_MAT(n_words, n_dim);
+
+    mat::iterator it = P.begin();
+    mat::iterator it_end = P.end();
+
+    ifstream fin;
+    fin.open("numbers.txt");
+    VALUE num;
+    for(fin >> num; it != it_end; ++it) {
+        *it = num;
+    }
+    fin.close();
+
+    pair.p = P.t();
 
     pair.q = DENSE_MAT(n_dim, n_docs);
     pair.q.zeros();
