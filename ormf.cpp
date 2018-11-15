@@ -136,9 +136,9 @@ MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
     /* pair.p = DENSE_MAT(n_dim, n_words); */
     /* pair.p.randn(); */
 
-    DENSE_MAT P = DENSE_MAT(n_words, n_dim);
+    pair.p = DENSE_MAT(n_dim, n_words);
 
-    mat::iterator it = P.begin();
+    mat::iterator it = pair.p.begin();
 
     ifstream fin;
     fin.open("numbers.txt");
@@ -148,8 +148,6 @@ MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
         ++it;
     }
     fin.close();
-
-    pair.p = P.t();
 
     pair.q = DENSE_MAT(n_dim, n_docs);
     pair.q.zeros();
@@ -286,6 +284,7 @@ int main( int argc, char **argv )
     IndexPair i4pair = build_index(X, n_words, n_docs);
 
     DENSE_MAT P = compute_QP(matpair, i4pair, n_docs, n_words); 
+    /* DENSE_MAT P = matpair.p; */
 
     write_mat_data(data_file, P); 
 
