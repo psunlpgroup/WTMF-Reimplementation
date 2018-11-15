@@ -127,27 +127,13 @@ SPARSE_MAT read_matrix(const char *filename, COORD &n_words, COORD &n_docs) {
 
 // Initialize matrix P and Q, where P is dim * n_words, Q is dim * n_docs 
 // return matrix P, matrix Q 
-// TODO: currently inits to the default Matlab random numbers
 MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
     MatrixPair pair;
 
-    /* arma_rng::set_seed_random(); */
-
-    /* pair.p = DENSE_MAT(n_dim, n_words); */
-    /* pair.p.randn(); */
+    arma_rng::set_seed_random();
 
     pair.p = DENSE_MAT(n_dim, n_words);
-
-    mat::iterator it = pair.p.begin();
-
-    ifstream fin;
-    fin.open("numbers.txt");
-    VALUE num;
-    while (fin >> num) {
-        *it = num;
-        ++it;
-    }
-    fin.close();
+    pair.p.randn();
 
     pair.q = DENSE_MAT(n_dim, n_docs);
     pair.q.zeros();
@@ -155,7 +141,7 @@ MatrixPair Initialize_PQ(COORD n_words, COORD n_docs) {
     return pair;
 }
 
-// Build index frmom matrix X 
+// Build index from matrix X 
 // Return two list of pointers, correponding to cell array in matlab: i4d, i4w.  
 IndexPair build_index(SPARSE_MAT X, COORD n_words, COORD n_docs) {
     vector<Index> i4w(n_words);
@@ -205,7 +191,7 @@ DENSE_MAT compute_QP(MatrixPair matpair, IndexPair i4pair, int n_docs, int n_wor
 
         // Step 1 
         // Compute matrix Q
-        // #pragma omp parallel for 
+        #pragma omp parallel for 
         for(COORD j=0; j<n_docs; j++){
             DENSE_MAT pv(n_dim,i4d[j].i.size()); 
             for (long unsigned int ii = 0; ii < i4d[j].i.size(); ++ii) { 
@@ -220,11 +206,11 @@ DENSE_MAT compute_QP(MatrixPair matpair, IndexPair i4pair, int n_docs, int n_wor
         // Compute matrix P
         DENSE_MAT qqtw = Q * Q.t() * w_m;    
         cout << "WTMF matrix P " << endl;
-        // #pragma omp parallel for  
+        #pragma omp parallel for  
         for(COORD ind=0; ind<n_words; ind++){
             DENSE_MAT qv(n_dim,i4w[ind].i.size()); 
             for (long unsigned int ii = 0; ii < i4w[ind].i.size(); ++ii) {
-                qv.col(ii) = Q.col(i4w[ind].i[ii]) ;
+                qv.col(ii) = Q.col(i4w[ind].i[ii]);
             }
             // solve a system of linear equations 
             vec i4w_vec = vec(i4w[ind].v);
@@ -284,7 +270,6 @@ int main( int argc, char **argv )
     IndexPair i4pair = build_index(X, n_words, n_docs);
 
     DENSE_MAT P = compute_QP(matpair, i4pair, n_docs, n_words); 
-    /* DENSE_MAT P = matpair.p; */
 
     write_mat_data(data_file, P); 
 
