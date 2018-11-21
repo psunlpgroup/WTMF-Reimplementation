@@ -15,15 +15,9 @@ TARGET = ormf
 SOURCE = ormf.cpp
 
 all:	
-	$(CC) $(SOURCE) $(CFLAGS) -o $(TARGET) $(ACI) $(LDLIBS)
-
-omp:
-	$(CC) $(SOURCE) $(CFLAGS) $(OPENMP) -o $(TARGET) $(ACI) $(LDLIBS)
+	$(CC) $(SOURCE) $(CFLAGS) $(OPENMP) -o $(TARGET) $(LDLIBS)
 
 local:	
-	$(CC) $(SOURCE) $(CFLAGS) -o $(TARGET) $(LOC)
-
-lomp:
 	$(CC) $(SOURCE) $(CFLAGS) $(OPENMP) -o $(TARGET) $(LOC)
 
 clean:
