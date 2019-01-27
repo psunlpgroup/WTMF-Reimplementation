@@ -1,0 +1,12 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=8
+#PBS -l walltime=2:00:00 
+#PBS -l pmem=2gb 
+#PBS -A open
+#PBS -j oe 
+## The following is the body of the script. By default PBS scripts execute in your home directory, not the
+## directory from which they were submitted. The following line places you in the directory from which the job
+## was submitted.
+cd $PBS_O_WORKDIR
+## Now we want to run the program "test". "test" is in the directory that this script is being submitted from
+./ormf
